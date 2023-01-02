@@ -1,6 +1,6 @@
-from mindstorms import MSHub, Motor, MotorPair, ColorSensor, DistanceSensor, Appfrom
-mindstorms.control import wait_for_seconds, wait_until, Timerfrom
-mindstorms.operator import greater_than, greater_than_or_equal_to, less_than, less_than_or_equal_to, equal_to, not_equal_to
+from mindstorms import MSHub, Motor, MotorPair, ColorSensor, DistanceSensor, App
+from mindstorms.control import wait_for_seconds, wait_until, Timer
+from mindstorms.operator import greater_than, greater_than_or_equal_to, less_than, less_than_or_equal_to, equal_to, not_equal_to
 import math
 
 # Functions
@@ -57,23 +57,20 @@ distance_sensor = DistanceSensor('F')
 calibrate()
 motor_hand.run_to_position(0, 'shortest path')
 
-# Set speed
-motor_pair.set_default_speed(50)
-# Move for 2 seconds
-motor_pair.move(2, 'seconds')
-# Move into the other direction
-motor_pair.set_default_speed(-50)
-motor_pair.move(2, 'seconds')
-
 # Raise arm to measure distance
 motor_arms.run_for_rotations(1.8,50)
 
+# Start driving straight forward
+motor_pair.set_default_speed(-30)
+motor_pair.start()
 dist = measure_distance()
 while dist is None:
-    motor_pair.move(1, 'seconds')
     dist = measure_distance()
 
-hub.light_matrix.write('Target: ' + str(dist) + ' cm away')
+# Stop after loop
+motor_pair.stop()
+
+hub.light_matrix.write('Dist: ' + str(dist) + ' cm')
 hub.speaker.start_sound('Hello',100) # Don't wait until finished
 hub.light_matrix.write('Hello!')
 
