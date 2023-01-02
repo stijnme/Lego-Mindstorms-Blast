@@ -9,6 +9,26 @@ def measure_distance():
     dist_cm = distance_sensor.get_distance_cm()
     return dist_cm
 
+## This calibrates Blast’s arms and head motor in port D, and runs it to the neutral position.
+def calibrate():
+    timer = Timer()
+    timer.reset()
+    motor_arms.start_at_power(100)
+    wait_for_seconds(0.3)
+    while motor_arms.get_speed() > 50 and timer.now() < 3:
+        pass
+    motor_arms.stop()
+    wait_for_seconds(0.2)
+    hub.motion_sensor.reset_yaw_angle()
+    wait_for_seconds(0.1)
+    timer.reset()
+    motor_arms.start(-50)
+    while hub.motion_sensor.get_yaw_angle() > -42 and timer.now() < 2:
+        pass
+    motor_arms.stop()
+    wait_for_seconds(0.2)
+    motor_arms.set_degrees_counted(0)
+
 # TODO: create function to remember arm position
 
 # Create your objects here.
@@ -34,8 +54,7 @@ distance_sensor = DistanceSensor('F')
 
 
 # Reset arms to neutral position
-# TODO
-#motor_arms.run_to_position(0, 'shortest path')
+calibrate()
 motor_hand.run_to_position(0, 'shortest path')
 
 # Set speed
