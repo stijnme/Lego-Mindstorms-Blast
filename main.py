@@ -73,7 +73,7 @@ while dist is None:
     motor_pair.move(1, 'seconds')
     dist = measure_distance()
 
-hub.light_matrix.write(str(dist) + ' cm from target')
+hub.light_matrix.write('Target: ' + str(dist) + ' cm away')
 hub.speaker.start_sound('Hello',100) # Don't wait until finished
 hub.light_matrix.write('Hello!')
 
@@ -89,4 +89,3 @@ motor_hand.run_to_degrees_counted(-60,100)
 
 hub.speaker.play_sound('Target Destroyed',100)
 motor_hand.run_to_degrees_counted(0,100)
-
