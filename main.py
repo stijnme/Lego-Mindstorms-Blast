@@ -21,8 +21,10 @@ hub.speaker.beep()
 ## Port a = left leg
 ## Port c = right leg
 motor_pair = MotorPair('A','C')
-
 motor_arms = Motor('D')
+
+## Port B = hand
+motor_hand = Motor('B')
 
 ## Port e = color sensor
 color_sensor = ColorSensor('E')
@@ -32,7 +34,9 @@ distance_sensor = DistanceSensor('F')
 
 
 # Reset arms to neutral position
+# TODO
 #motor_arms.run_to_position(0, 'shortest path')
+motor_hand.run_to_position(0, 'shortest path')
 
 # Set speed
 motor_pair.set_default_speed(50)
@@ -57,3 +61,13 @@ hub.light_matrix.write('Hello!')
 
 # Return arms to starting position
 motor_arms.run_for_rotations(-1.8,50)
+
+# Time to shoot
+hub.speaker.start_sound('Laser',100) # Don't wait until finished
+motor_hand.run_to_degrees_counted(60,100)
+hub.speaker.start_sound('Laser',100) # Don't wait until finished
+motor_hand.run_to_degrees_counted(-60,100)
+
+hub.speaker.play_sound('Target Destroyed',100)
+motor_hand.run_to_degrees_counted(0,100)
+
